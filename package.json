@@ -1,5 +1,5 @@
 {
-  "main": "dist/example/example-modal.js",
+  "main": "dist/example/example-control.js",
   "private": true,
   "scripts": {
     "test": "npm run build && npm run lint",
