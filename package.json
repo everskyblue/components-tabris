@@ -1,14 +1,8 @@
 {
-  "main": "dist/example/example-control.js",
-  "private": true,
-  "scripts": {
-    "test": "npm run build && npm run lint",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
-    "build": "tsc -p .",
-    "watch": "tsc -p . -w --preserveWatchOutput --inlineSourceMap",
-    "start": "tabris serve -a -w"
-  },
-  "dependencies": {
-    "tabris": "~3.8.0"
-  }
+    "name": "components-tabris",
+    "version": "0.2.0",
+    "main": "./dist/index.js",
+    "dependencies": {
+        "tabris": "~3.8.0"
+    }
 }

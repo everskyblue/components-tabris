@@ -1,5 +1,5 @@
 import {Page as PageTabris} from 'tabris'
-
+import {getInArray} from '../helpers'
 
 class Page extends PageTabris {
     constructor(attrs) {
@@ -42,7 +42,8 @@ class Page extends PageTabris {
         });
     }
     
-    append(widgets) {
+    append(...$widgets) {
+        const widgets = getInArray($widgets);
         const actionCollection = widgets.find(widget=> widget.toString() === 'ActionCollection');
         if (typeof actionCollection !== 'undefined') this.trigger('$actionStore', {actions: actionCollection});
         super.append(widgets.filter(widget=> widget !== actionCollection));

@@ -1,3 +1,4 @@
+import '../init'
 import {
     NavigationView as Navigation,
     CollectionView,
@@ -9,6 +10,8 @@ import {
     EventObject,
     NativeObject
 } from 'tabris'
+import {getInArray} from '../helpers'
+import {fontTitle, fontTitleGroup, padding} from '../variant'
 
 class EventActionItemSelected extends EventObject {
     constructor(props) {
@@ -25,7 +28,7 @@ export class NavigationView extends Navigation {
     }
 
     append(...widgets) {
-        const wg = Array.isArray(widgets[0]) ? widgets[0] : [...widgets];
+        const wg = getInArray(widgets);
         const somePage = wg.some(page => page.toString() === 'PageComponent');
         
         if (somePage) {
@@ -62,25 +65,27 @@ export class NavigationView extends Navigation {
 export class DrawerMenuItem extends Composite {
     constructor(attrs) {
         super({
-            ...attrs,
             left: 0,
             right: 0,
             top: 'prev()',
-            padding: 10,
-            highlightOnTouch: true
+            padding,
+            highlightOnTouch: true,
+            ...attrs
         })
         
         this.$indexes.push(this);
-        
+        let left = 50;
         if (this.image !== null) {
             this.append(this._throwParamOrGet('image', ImageView, {
-                image: this.image
+                image: this.image,
+                centerY: true,
             }));
         }
         
         this.append(this._throwParamOrGet('title', TextView, {
-            text: this.title
-        }));
+            text: this.title.toCapitalize(),
+            centerY: true,
+        }).set({font: fontTitle, left}));
     }
     
     set onItemSelected(callback){
@@ -160,10 +165,10 @@ export class NavigationDrawer extends Composite {
         
         return [
             new TextView({
-                text,
-                padding: 10,
+                text: text.toCapitalize(),
+                padding: (padding),
                 top: 'prev() 10',
-                font:'12px bold'
+                font:fontTitleGroup
             }),
             ...children
         ];
