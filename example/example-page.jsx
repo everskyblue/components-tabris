@@ -11,7 +11,7 @@ import {
     NavigationDrawer,
     Page,
     ActionContainer
-} from '../src/views'
+} from '../src/view'
 
 import {pagePreference} from './example-preference'
 import buttons from './example-modal'
