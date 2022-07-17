@@ -7,7 +7,7 @@ import {
 import {
     Modal,
     Toast,
-} from '../src/modal'
+} from 'components-tabris'
 
 function createToast(arg) {
     new Toast('toast message').show(Toast.LONG)

@@ -1,4 +1,6 @@
-export const versio = '0.2.0';
+import {version as _version} from '../package.json'
+
+export const version = _version;
 
 export {
     Page,

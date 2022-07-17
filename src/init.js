@@ -1,6 +1,6 @@
 import {app} from 'tabris'
 
-app.registerFont('Roboto Slab', '../assets/fonts/RobotoSlab-VariableFont_wght.ttf');
+app.registerFont('Roboto Slab', __dirname+'/../assets/fonts/RobotoSlab-VariableFont_wght.ttf');
 
 String.prototype.toCapitalize = function() {
     let nw = '';

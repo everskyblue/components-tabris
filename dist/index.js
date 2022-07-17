@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Modal = exports.Toast = exports.CategoryPreference = exports.ScreenPreference = exports.CheckBoxPreference = exports.SwitchPreference = exports.TextPreference = exports.ListPreference = exports.getValuePreference = exports.setPreference = exports.NavigationDrawer = exports.NavigationView = exports.ActionCollection = exports.ActionContainer = exports.Page = exports.versio = void 0;
-exports.versio = '0.2.0';
+exports.Modal = exports.Toast = exports.CategoryPreference = exports.ScreenPreference = exports.CheckBoxPreference = exports.SwitchPreference = exports.TextPreference = exports.ListPreference = exports.getValuePreference = exports.setPreference = exports.NavigationDrawer = exports.NavigationView = exports.ActionCollection = exports.ActionContainer = exports.Page = exports.version = void 0;
+const package_json_1 = require("../package.json");
+exports.version = package_json_1.version;
 var view_1 = require("./view");
 Object.defineProperty(exports, "Page", { enumerable: true, get: function () { return view_1.Page; } });
 Object.defineProperty(exports, "ActionContainer", { enumerable: true, get: function () { return view_1.ActionContainer; } });
@@ -20,4 +21,3 @@ Object.defineProperty(exports, "CategoryPreference", { enumerable: true, get: fu
 var modal_1 = require("./modal");
 Object.defineProperty(exports, "Toast", { enumerable: true, get: function () { return modal_1.Toast; } });
 Object.defineProperty(exports, "Modal", { enumerable: true, get: function () { return modal_1.Modal; } });
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXguanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQWEsUUFBQSxNQUFNLEdBQUcsT0FBTyxDQUFDO0FBRTlCLCtCQU1lO0FBTFgsNEZBQUEsSUFBSSxPQUFBO0FBQ0osdUdBQUEsZUFBZSxPQUFBO0FBQ2Ysd0dBQUEsZ0JBQWdCLE9BQUE7QUFDaEIsc0dBQUEsY0FBYyxPQUFBO0FBQ2Qsd0dBQUEsZ0JBQWdCLE9BQUE7QUFHcEIsMkNBU3FCO0FBUmpCLDJHQUFBLGFBQWEsT0FBQTtBQUNiLGdIQUFBLGtCQUFrQixPQUFBO0FBQ2xCLDRHQUFBLGNBQWMsT0FBQTtBQUNkLDRHQUFBLGNBQWMsT0FBQTtBQUNkLDhHQUFBLGdCQUFnQixPQUFBO0FBQ2hCLGdIQUFBLGtCQUFrQixPQUFBO0FBQ2xCLDhHQUFBLGdCQUFnQixPQUFBO0FBQ2hCLGdIQUFBLGtCQUFrQixPQUFBO0FBR3RCLGlDQUdnQjtBQUZaLDhGQUFBLEtBQUssT0FBQTtBQUNMLDhGQUFBLEtBQUssT0FBQSJ9

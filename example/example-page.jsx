@@ -11,7 +11,7 @@ import {
     NavigationDrawer,
     Page,
     ActionContainer
-} from '../src/view'
+} from 'components-tabris'
 
 import {pagePreference} from './example-preference'
 import buttons from './example-modal'
@@ -57,11 +57,9 @@ drawer.set({
 drawer.append((<NavigationDrawer onLiezw={(e)=> console.log(e)}>
     <NavigationDrawer.MenuItem title='item 1' onItemSelected={()=>console.log} />
     <NavigationDrawer.Group title='social'>
-        <NavigationDrawer.MenuItem title='facebook' image='../assets/images/facebook.png' onItemSelected={console.log} />
-        <NavigationDrawer.MenuItem title='twitter' image='../assets/images/twitter.png' onItemSelected={console.log} />
-        <NavigationDrawer.MenuItem title='youtube' image='../assets/images/youtube.png' onItemSelected={console.log} />
+        <NavigationDrawer.MenuItem title='facebook' image='/assets/images/facebook.png' onItemSelected={console.log} />
+        <NavigationDrawer.MenuItem title='twitter' image='/assets/images/twitter.png' onItemSelected={console.log} />
+        <NavigationDrawer.MenuItem title='youtube' image='/assets/images/youtube.png' onItemSelected={console.log} />
     </NavigationDrawer.Group>
 </NavigationDrawer>
 ))
-/*
-*/

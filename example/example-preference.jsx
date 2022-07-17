@@ -5,7 +5,7 @@ import {
     ListPreference,
     SwitchPreference,
     TextPreference
-} from '../src/preference'
+} from 'components-tabris'
 
 function getList() {
     return [
