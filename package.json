@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "tabris": "~3.8.0",
-    "string-toCapitalize": "gist:everskyblue/5beed5589c3aa61072473f530dc05d36"
+    "string-tocapitalize": "https://github.com/everskyblue/string-toCapitalize"
   },
   "description": "creacion de Componentes basicos para tabris",
   "directories": {
