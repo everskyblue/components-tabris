@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("string-tocapitalize");
 exports.Modal = exports.Toast = exports.CategoryPreference = exports.ScreenPreference = exports.CheckBoxPreference = exports.SwitchPreference = exports.TextPreference = exports.ListPreference = exports.getValuePreference = exports.setPreference = exports.NavigationDrawer = exports.NavigationView = exports.ActionCollection = exports.ActionContainer = exports.Page = exports.version = void 0;
+require("string-tocapitapize");
 const package_json_1 = require("../package.json");
 exports.version = package_json_1.version;
 var view_1 = require("./view");

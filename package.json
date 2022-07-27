@@ -2,13 +2,17 @@
   "name": "components-tabris",
   "version": "0.2.3",
   "main": "./dist/index.js",
+  "typings": "./types/index.d.ts",
   "scripts": {
     "build": "tsc -p .",
     "watch": "tsc -p . -w --preserveWatchOutput --inlineSourceMap"
   },
   "dependencies": {
-    "tabris": "~3.8.0",
-    "string-tocapitalize": "https://github.com/everskyblue/string-toCapitalize"
+    "string-tocapitalize": "https://github.com/everskyblue/string-toCapitalize",
+    "tabris": "~3.8.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.4"
   },
   "description": "creacion de Componentes basicos para tabris",
   "directories": {
@@ -19,10 +23,10 @@
     "url": "git+https://github.com/everskyblue/components-tabris.git"
   },
   "keywords": [
-      "tabris",
-      "components-tabris",
-      "component"
-    ],
+    "tabris",
+    "components-tabris",
+    "component"
+  ],
   "author": "Nike",
   "license": "ISC",
   "bugs": {
