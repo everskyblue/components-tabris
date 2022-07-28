@@ -1,4 +1,4 @@
-import 'string-tocapitapize'
+import 'string-tocapitalize'
 import {version as _version} from '../package.json'
 
 export const version = _version;
