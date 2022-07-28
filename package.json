@@ -4,7 +4,7 @@
   "main": "./dist/index.js",
   "typings": "./types/index.d.ts",
   "scripts": {
-    "build": "tsc -p .",
+    "build-local": "tsc -p .",
     "watch": "tsc -p . -w --preserveWatchOutput --inlineSourceMap"
   },
   "dependencies": {
