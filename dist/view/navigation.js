@@ -40,7 +40,7 @@ class NavigationView extends tabris_1.NavigationView {
                 });
             }
         }
-        super.append(...widgets);
+        return super.append(...widgets);
     }
     toString() {
         return 'NavigationView';

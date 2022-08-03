@@ -46,7 +46,7 @@ class Page extends PageTabris {
         const widgets = getInArray($widgets);
         const actionCollection = widgets.find(widget=> widget.toString() === 'ActionCollection');
         if (typeof actionCollection !== 'undefined') this.trigger('$actionStore', {actions: actionCollection});
-        super.append(widgets.filter(widget=> widget !== actionCollection));
+        return super.append(widgets.filter(widget=> widget !== actionCollection));
     }
     
     toString() {

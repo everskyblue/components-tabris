@@ -54,7 +54,7 @@ export class NavigationView extends Navigation {
                 });
             }
         }
-        super.append(...widgets);
+        return super.append(...widgets);
     }
     
     toString() {
