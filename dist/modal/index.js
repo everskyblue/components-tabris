@@ -74,7 +74,7 @@ class Modal {
             layoutData: "stretchX",
             top: tabris_1.LayoutData.prev,
         }).appendTo(modal);
-        this.onBoundsChanged(({ value }) => {
+        modal.onBoundsChanged(({ value }) => {
             if (tabris_1.device.screenHeight - 50 < value.height) {
                 modal.top = modal.bottom = 50;
                 scrollableContent.bottom = tabris_1.LayoutData.next;
@@ -152,8 +152,10 @@ class Modal {
                 bottom: 0,
                 style: "text",
             });
-            return (buttons.push(btn),
-                new tabris_1.Listeners(btn, type).onTap(() => event.trigger(new EventModal())));
+            const event = new tabris_1.Listeners(btn, type);
+            btn.onTap(() => event.trigger(new EventModal()));
+            buttons.push(btn);
+            return event;
         }
     }
 }

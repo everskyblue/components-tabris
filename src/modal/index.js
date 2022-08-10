@@ -99,7 +99,7 @@ export class Modal {
             top: LayoutData.prev,
         }).appendTo(modal);
 
-        this.onBoundsChanged(({ value }) => {
+        modal.onBoundsChanged(({ value }) => {
             if (device.screenHeight - 50 < value.height) {
                 modal.top = modal.bottom = 50;
                 scrollableContent.bottom = LayoutData.next;
@@ -185,13 +185,10 @@ export class Modal {
                 bottom: 0,
                 style: "text",
             });
-
-            return (
-                buttons.push(btn),
-                new Listeners(btn, type).onTap(() =>
-                    event.trigger(new EventModal())
-                )
-            );
+            const event = new Listeners(btn, type);
+            btn.onTap(() => event.trigger(new EventModal()));
+            buttons.push(btn);
+            return event;
         }
     }
 }
