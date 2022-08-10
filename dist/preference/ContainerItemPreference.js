@@ -5,6 +5,7 @@ const ScreenPreference_1 = require("./ScreenPreference");
 const initializeStorage_1 = require("./initializeStorage");
 const variant_1 = require("../variant");
 const modal_1 = require("../modal");
+const view_1 = require("../view");
 const adjustCompactText = {
     left: 0,
     right: '10%'
@@ -47,13 +48,13 @@ class ContainerItemPreference extends tabris_1.Composite {
         if (typeof this.renderView !== 'function') {
             throw new Error('property renderView needs a function');
         }
-        $(tabris_1.NavigationView).only().append(this.renderView());
+        $(view_1.NavigationView).only().append(this.renderView());
     }
     showInPage() {
         const screen = new ScreenPreference_1.default({
             title: this.title
         }).append(new ContainerItemPreference().append(this.view));
-        $(tabris_1.NavigationView).only().append(screen);
+        $(view_1.NavigationView).only().append(screen);
     }
     showInModal() {
         const modal = new modal_1.Modal();

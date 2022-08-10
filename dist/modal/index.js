@@ -14,10 +14,17 @@ const tabris_1 = require("tabris");
 const animation_1 = require("../animation");
 class EventModal extends tabris_1.EventObject {
 }
-class Toast {
+class AnimationTime {
+}
+AnimationTime.LONG = 3000;
+AnimationTime.MEDIUM = 2000;
+AnimationTime.SHORT = 1000;
+class Toast extends AnimationTime {
     constructor(message) {
-        const size = tabris_1.sizeMeasurement.measureTextsSync([{ text: message, font: '12px' }]);
-        const isMax = size[0].width > (screen.width - 20);
+        const size = tabris_1.sizeMeasurement.measureTextsSync([
+            { text: message, font: "12px" },
+        ]);
+        const isMax = size[0].width > screen.width - 20;
         const props = {};
         if (isMax) {
             props.left = 20;
@@ -26,29 +33,33 @@ class Toast {
         else {
             props.centerX = true;
         }
-        const modal = new tabris_1.Composite(Object.assign({ background: 'black', padding: 10, cornerRadius: 10, bottom: 30, opacity: 0 }, props)).append(new tabris_1.TextView({
+        const modal = new tabris_1.Composite(Object.assign({ background: "black", padding: 10, cornerRadius: 10, bottom: 30, opacity: 0 }, props)).append(new tabris_1.TextView({
             text: message,
-            font: '12px',
-            textColor: 'white',
+            font: "12px",
+            textColor: "white",
             left: 0,
-            right: 0
+            right: 0,
         }));
-        Object.defineProperty(this, 'show', {
+        Object.defineProperty(this, "show", {
             configurable: false,
             value: (time) => __awaiter(this, void 0, void 0, function* () {
                 tabris_1.contentView.append(modal);
                 yield (0, animation_1.animate)(modal, time, Toast.SHORT);
                 modal.dispose();
-            })
+            }),
         });
     }
 }
 exports.Toast = Toast;
-Toast.LONG = 3000;
-Toast.MEDIUM = 2000;
-Toast.SHORT = 1000;
 class Modal {
     constructor(attrs = {}) {
+        const buttons = [];
+        //- no volver añadir los botones a la vista
+        let buttonAccept = null;
+        let buttonCancel = null;
+        let isAddButtons = false;
+        let isDetach = false;
+        let isShow = false;
         const modalWrap = new tabris_1.Composite({
             left: 0,
             right: 0,
@@ -56,49 +67,94 @@ class Modal {
             bottom: 0,
             opacity: 0,
             highlightOnTouch: false,
-            background: new tabris_1.Color(0, 0, 0, 50)
-        }).onTap(e => e.preventDefault());
-        const buttons = [];
-        const modal = new tabris_1.Composite(Object.assign({ width: 300, centerY: true, centerX: true, background: 'white', padding: 10, cornerRadius: 10 }, attrs)).appendTo(modalWrap);
-        const createButton = (type, text) => {
-            const btn = new tabris_1.Button({
-                text,
-                top: buttons.length === 0 ? 'prev() 20' : 'auto',
-                right: buttons.length === 0 ? 0 : 'prev()',
-                bottom: 0,
-                style: 'text'
-            });
-            const event = new tabris_1.Listeners(btn, type);
-            btn.onTap(() => {
-                event.trigger(new EventModal());
-            });
-            buttons.push(btn);
-            return event;
-        };
-        Object.defineProperty(this, 'setButtonAccept', {
-            configurable: false,
-            value: (text) => createButton('accept', text)
+            background: new tabris_1.Color(0, 0, 0, 50),
+        }).onTap((e) => e.preventDefault());
+        const modal = new tabris_1.Composite(Object.assign({ width: 300, centerY: true, centerX: true, padding: 10, cornerRadius: 10 }, attrs)).appendTo(modalWrap);
+        const scrollableContent = new tabris_1.ScrollView({
+            layoutData: "stretchX",
+            top: tabris_1.LayoutData.prev,
+        }).appendTo(modal);
+        this.onBoundsChanged(({ value }) => {
+            if (tabris_1.device.screenHeight - 50 < value.height) {
+                modal.top = modal.bottom = 50;
+                scrollableContent.bottom = tabris_1.LayoutData.next;
+            }
+            (0, animation_1.animateShow)(modalWrap, 50, 500);
         });
-        Object.defineProperty(this, 'setButtonCancel', {
+        Object.defineProperty(this, "setButtonAccept", {
             configurable: false,
-            value: (text) => createButton('cancel', text)
+            value: (text) => {
+                if (!buttonAccept) {
+                    buttonAccept = createButton("accept", text);
+                }
+                return buttonAccept;
+            },
         });
-        Object.defineProperty(this, 'addView', {
+        Object.defineProperty(this, "setButtonCancel", {
             configurable: false,
-            value: (view) => modal.append(view)
+            value: (text) => {
+                if (!buttonCancel) {
+                    buttonCancel = createButton("cancel", text);
+                }
+                return buttonCancel;
+            },
         });
-        Object.defineProperty(this, 'show', {
+        Object.defineProperty(this, "addView", {
+            configurable: false,
+            value: (view) => (scrollableContent.append(view), undefined),
+        });
+        Object.defineProperty(this, "show", {
             configurable: false,
             value: (view) => {
-                modal.append(buttons);
-                tabris_1.contentView.append(modalWrap);
-                (0, animation_1.animateShow)(modalWrap, 50, 500);
-            }
+                if (!isAddButtons) {
+                    isAddButtons = true;
+                    modal.append(buttons);
+                }
+                if (!isShow || isDetach) {
+                    isShow = true;
+                    isDetach = false;
+                    tabris_1.contentView.append(modalWrap);
+                }
+            },
         });
-        Object.defineProperty(this, 'remove', {
+        Object.defineProperty(this, "removeView", {
             configurable: false,
-            value: () => modalWrap.dispose()
+            value: () => {
+                return scrollableContent.children().dispose(), undefined;
+            },
         });
+        Object.defineProperty(this, "removeButtons", {
+            configurable: false,
+            value: () => {
+                buttonAccept = buttonCancel = null;
+                buttons.forEach((button) => {
+                    button.dispose();
+                });
+            },
+        });
+        Object.defineProperty(this, "remove", {
+            configurable: false,
+            value: () => {
+                if (isDetach)
+                    return;
+                //para que se pueda usar en un contexto de mas alcanza a solo una llamada
+                (0, animation_1.animateHidden)(modalWrap, 0, AnimationTime.SHORT).then(() => {
+                    isDetach = true;
+                    modalWrap.detach();
+                });
+            },
+        });
+        function createButton(type, text) {
+            const btn = new tabris_1.Button({
+                text,
+                top: buttons.length === 0 ? "prev() 20" : "auto",
+                right: buttons.length === 0 ? 0 : "prev()",
+                bottom: 0,
+                style: "text",
+            });
+            return (buttons.push(btn),
+                new tabris_1.Listeners(btn, type).onTap(() => event.trigger(new EventModal())));
+        }
     }
 }
 exports.Modal = Modal;
