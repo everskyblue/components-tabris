@@ -17,19 +17,23 @@ export default class ListPreference extends ContainerItemPreference {
             enumerable: false,
             configurable: false,
             get() {
-                return this.arrayObjectList.map(({text, key}, i) => {
+                return this.arrayObjectList.map((data, i) => {
+                    const isObject = typeof data === 'object';
+                    const text = isObject ? data.text : data;
+                    const value = isObject ? data.valueStore : i;
+
                     const radio = new RadioButton({
                         text,
                         left:0,
                         right: 0,
                         highlightOnTouch: true,
                         top: 'prev() 5',
-                        checked: getValuePreference(this.key) === i
+                        checked: getValuePreference(this.key) === value
                     });
                     
                     radio.onSelect(({checked})=> {
                         if (checked) {
-                            this.onChange.trigger({value: i})
+                            this.onChange.trigger({value})
                         }
                     })
                     return radio;

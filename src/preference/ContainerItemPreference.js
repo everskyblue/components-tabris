@@ -1,8 +1,9 @@
-import {NavigationView, TextView, Composite, NativeObject} from 'tabris'
+import {TextView, Composite, NativeObject} from 'tabris'
 import ScreenPreference from './ScreenPreference'
 import {setPreference, existsKeyPreference} from './initializeStorage'
 import {padding, fontSummary, fontTitle} from '../variant'
 import {Modal} from '../modal'
+import { NavigationView } from '../view'
 
 const adjustCompactText = {
     left: 0,
