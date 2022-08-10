@@ -7,7 +7,8 @@ import type {
     Listeners,
     Listener,
     Widget,
-    Button
+    Button,
+    Action
 } from "tabris";
 
 
@@ -23,6 +24,13 @@ declare module "components-tabris" {
         [P in keyof T as `on${Capitalize<string & P>}Changed`]: FunctionEvent
     }
 
+    export function ActionContainer(): ActionCollection;
+    
+    export class ActionCollection extends Set {
+        constructor(widgets: Action[]);
+        toString(): string
+    }
+    
     export namespace contracts {
         export interface Page {
             $visible: boolean;
