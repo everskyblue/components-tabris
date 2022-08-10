@@ -63,9 +63,13 @@ declare module "components-tabris" {
         }
 
         type OptionModeList = 'modal' | 'page';
+        type TArrayObjectList = {
+            text: string
+            valueStore: string
+        } | string
 
         export interface ListPreference {
-            arrayObjectList: any[]
+            arrayObjectList: TArrayObjectList[]
             mode: OptionModeList
         }
 
@@ -263,27 +267,31 @@ declare module "components-tabris" {
         space: number;
         renderView: object;
         
-        onKeyChanged(callback: FunctionEvent): any
-        onValueChanged(callback: FunctionEvent): any
-        onTitleChanged(callback: FunctionEvent): any
-        onSummaryChanged(callback: FunctionEvent): any
-        onCompactChanged(callback: FunctionEvent): any
-        onModeChanged(callback: FunctionEvent): any
-        onColorTitleChanged(callback: FunctionEvent): any
-        onFontTitleChanged(callback: FunctionEvent): any
-        onColorSummaryChanged(callback: FunctionEvent): any
-        onFontSummaryChanged(callback: FunctionEvent): any
-        onSpaceChanged(callback: FunctionEvent): any
-        onRenderViewChanged(callback: FunctionEvent): any
+        onKeyChanged(callback: FunctionEvent): ContainerItemPreference
+        onValueChanged(callback: FunctionEvent): ContainerItemPreference
+        onTitleChanged(callback: FunctionEvent): ContainerItemPreference
+        onSummaryChanged(callback: FunctionEvent): ContainerItemPreference
+        onCompactChanged(callback: FunctionEvent): ContainerItemPreference
+        onModeChanged(callback: FunctionEvent): ContainerItemPreference
+        onColorTitleChanged(callback: FunctionEvent): ContainerItemPreference
+        onFontTitleChanged(callback: FunctionEvent): ContainerItemPreference
+        onColorSummaryChanged(callback: FunctionEvent): ContainerItemPreference
+        onFontSummaryChanged(callback: FunctionEvent): ContainerItemPreference
+        onSpaceChanged(callback: FunctionEvent): ContainerItemPreference
+        onRenderViewChanged(callback: FunctionEvent): ContainerItemPreference
     }
 
     export class ScreenPreference extends ContainerItemPreference {}
     export class TextPreference extends ContainerItemPreference {}
-    export class ListPreference extends ContainerItemPreference {}
+    export class ListPreference extends ContainerItemPreference implements ListPreferencePropertiesEvent {
+        arrayObjectList: contracts.TArrayObjectList[];
+        mode: contracts.OptionModeList
+        onArrayObjectListChanged(): ListPreference
+    }
 
     export class Checked extends ContainerItemPreference implements CheckedPropertiesEvent {
         checked: boolean;
-        onCheckedChanged(fn: FunctionEvent): any
+        onCheckedChanged(fn: FunctionEvent): Checked
     }
 
     export class SwitchPreference extends ContainerItemPreference {}
@@ -344,6 +352,3 @@ declare module "components-tabris" {
         setButtonAccept(text: string): Listeners<{target: Button}>
     }
 }
-
-///type Contructor<T> = new (...args: any[])=> T
-///type BaseConstructor<Context, Props> = Contructor<Context> & {prototype: Props}
