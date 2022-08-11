@@ -53,6 +53,7 @@ class Toast extends AnimationTime {
 exports.Toast = Toast;
 class Modal {
     constructor(attrs = {}) {
+        const width = 300;
         const buttons = [];
         //- no volver añadir los botones a la vista
         let buttonAccept = null;
@@ -69,17 +70,32 @@ class Modal {
             highlightOnTouch: false,
             background: new tabris_1.Color(0, 0, 0, 50),
         }).onTap((e) => e.preventDefault());
-        const modal = new tabris_1.Composite(Object.assign({ width: 300, centerY: true, centerX: true, padding: 10, cornerRadius: 10 }, attrs)).appendTo(modalWrap);
+        const modal = new tabris_1.Composite(Object.assign({ width, background: "white", centerY: true, centerX: true, padding: 10, cornerRadius: 10 }, attrs)).appendTo(modalWrap);
         const scrollableContent = new tabris_1.ScrollView({
-            layoutData: "stretchX",
+            id: "scrollable-modal-content",
+            direction: "vertical",
+            left: 0,
+            right: 0,
             top: tabris_1.LayoutData.prev,
+            bottom: tabris_1.LayoutData.prev,
         }).appendTo(modal);
         modal.onBoundsChanged(({ value }) => {
-            if (tabris_1.device.screenHeight - 50 < value.height) {
-                modal.top = modal.bottom = 50;
-                scrollableContent.bottom = tabris_1.LayoutData.next;
+            if (tabris_1.device.screenHeight - 10 < value.height) {
+                modal.layoutData = {
+                    height: "auto",
+                    top: 10,
+                    bottom: 10,
+                    centerX: true,
+                    width
+                };
+                scrollableContent.layoutData = {
+                    top: tabris_1.LayoutData.prev,
+                    bottom: 25,
+                    left: 0,
+                    right: 0,
+                    height: "auto",
+                };
             }
-            (0, animation_1.animateShow)(modalWrap, 50, 500);
         });
         Object.defineProperty(this, "setButtonAccept", {
             configurable: false,
@@ -108,12 +124,17 @@ class Modal {
             value: (view) => {
                 if (!isAddButtons) {
                     isAddButtons = true;
-                    modal.append(buttons);
+                    modal.append(new tabris_1.Composite({
+                        layoutData: "stretchX",
+                        id: "buttons-modal",
+                        bottom: 0,
+                    }).append(buttons));
                 }
                 if (!isShow || isDetach) {
                     isShow = true;
                     isDetach = false;
                     tabris_1.contentView.append(modalWrap);
+                    (0, animation_1.animateShow)(modalWrap, 0, 400);
                 }
             },
         });

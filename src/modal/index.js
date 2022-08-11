@@ -67,6 +67,7 @@ export class Toast extends AnimationTime {
 
 export class Modal {
     constructor(attrs = {}) {
+        const width = 300;
         const buttons = [];
         //- no volver añadir los botones a la vista
         let buttonAccept = null;
@@ -86,7 +87,8 @@ export class Modal {
         }).onTap((e) => e.preventDefault());
 
         const modal = new Composite({
-            width: 300,
+            width,
+            background: "white",
             centerY: true,
             centerX: true,
             padding: 10,
@@ -95,16 +97,31 @@ export class Modal {
         }).appendTo(modalWrap);
 
         const scrollableContent = new ScrollView({
-            layoutData: "stretchX",
+            id: "scrollable-modal-content",
+            direction: "vertical",
+            left: 0,
+            right: 0,
             top: LayoutData.prev,
+            bottom: LayoutData.prev,
         }).appendTo(modal);
 
         modal.onBoundsChanged(({ value }) => {
-            if (device.screenHeight - 50 < value.height) {
-                modal.top = modal.bottom = 50;
-                scrollableContent.bottom = LayoutData.next;
+            if (device.screenHeight - 10 < value.height) {
+                modal.layoutData = {
+                    height: "auto",
+                    top: 10,
+                    bottom: 10,
+                    centerX: true,
+                    width
+                };
+                scrollableContent.layoutData = {
+                    top: LayoutData.prev,
+                    bottom: 25,
+                    left: 0,
+                    right: 0,
+                    height: "auto",
+                };
             }
-            animateShow(modalWrap, 50, 500);
         });
 
         Object.defineProperty(this, "setButtonAccept", {
@@ -137,13 +154,20 @@ export class Modal {
             value: (view) => {
                 if (!isAddButtons) {
                     isAddButtons = true;
-                    modal.append(buttons);
+                    modal.append(
+                        new Composite({
+                            layoutData: "stretchX",
+                            id: "buttons-modal",
+                            bottom: 0,
+                        }).append(buttons)
+                    );
                 }
 
                 if (!isShow || isDetach) {
                     isShow = true;
                     isDetach = false;
                     contentView.append(modalWrap);
+                    animateShow(modalWrap, 0, 400);
                 }
             },
         });
