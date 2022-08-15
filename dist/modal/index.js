@@ -53,7 +53,6 @@ class Toast extends AnimationTime {
 exports.Toast = Toast;
 class Modal {
     constructor(attrs = {}) {
-        const width = 300;
         const buttons = [];
         //- iteracion
         let buttonAccept = null;
@@ -63,10 +62,9 @@ class Modal {
         let isShow = false;
         // ui
         const mobile_width = tabris_1.device.screenWidth;
-        const mobile_height = tabris_1.device.screenHeight;
         const max_size = 560;
         const properties_modal_container = {
-            elavation: 24,
+            elevation: 24,
             centerY: true,
             padding: 10,
             cornerRadius: 5,
@@ -113,7 +111,7 @@ class Modal {
         });
         const modal_content_scrollable = new tabris_1.ScrollView({
             layoutData: 'stretchX'
-        });
+        }).appendTo(modal_content);
         modal_container.onBoundsChanged(({ value, target }) => {
             const { height: contentViewHeight } = tabris_1.contentView.bounds;
             if (contentViewHeight < value.height) {

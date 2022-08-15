@@ -67,7 +67,6 @@ export class Toast extends AnimationTime {
 
 export class Modal {
     constructor(attrs = {}) {
-        const width = 300;
         const buttons = [];
         //- iteracion
         let buttonAccept = null;
@@ -78,10 +77,9 @@ export class Modal {
 
         // ui
         const mobile_width = device.screenWidth;
-        const mobile_height = device.screenHeight;
         const max_size = 560;
         const properties_modal_container = {
-            elavation: 24,
+            elevation: 24,
             centerY: true,
             padding: 10,
             cornerRadius: 5,
@@ -133,7 +131,7 @@ export class Modal {
 
         const modal_content_scrollable = new ScrollView({
             layoutData: 'stretchX'
-        });
+        }).appendTo(modal_content);
 
         
         modal_container.onBoundsChanged(({ value, target }) => {
