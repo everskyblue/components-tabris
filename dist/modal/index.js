@@ -55,46 +55,71 @@ class Modal {
     constructor(attrs = {}) {
         const width = 300;
         const buttons = [];
-        //- no volver añadir los botones a la vista
+        //- iteracion
         let buttonAccept = null;
         let buttonCancel = null;
         let isAddButtons = false;
         let isDetach = false;
         let isShow = false;
+        // ui
+        const mobile_width = tabris_1.device.screenWidth;
+        const mobile_height = tabris_1.device.screenHeight;
+        const max_size = 560;
+        const properties_modal_container = {
+            elavation: 24,
+            centerY: true,
+            padding: 10,
+            cornerRadius: 5,
+            opacity: 0,
+            background: 'white',
+            id: 'modal-container'
+        };
+        if (max_size > mobile_width) {
+            Object.assign(properties_modal_container, {
+                left: 24,
+                right: 24,
+            });
+        }
+        else {
+            Object.assign(properties_modal_container, {
+                width: max_size
+            });
+        }
         const modalWrap = new tabris_1.Composite({
             left: 0,
             right: 0,
             top: 0,
             bottom: 0,
-            opacity: 0,
+            opacity: 1,
             highlightOnTouch: false,
             background: new tabris_1.Color(0, 0, 0, 50),
         }).onTap((e) => e.preventDefault());
-        const modal = new tabris_1.Composite(Object.assign({ width, background: "white", centerY: true, centerX: true, padding: 10, cornerRadius: 10 }, attrs)).appendTo(modalWrap);
-        const scrollableContent = new tabris_1.ScrollView({
-            id: "scrollable-modal-content",
-            direction: "vertical",
-            left: 0,
-            right: 0,
-            top: tabris_1.LayoutData.prev,
+        const modal_container = new tabris_1.Composite(properties_modal_container).appendTo(modalWrap);
+        if ('title' in attrs) {
+            modal_container.append(new tabris_1.TextView({
+                id: 'modal-title',
+                font: 'medium 18px',
+                padding: 10,
+                left: 0,
+                right: 0,
+                text: attrs.text.toCapitalize()
+            }));
+        }
+        const modal_content = new tabris_1.Composite({
+            top: '#modal-title',
             bottom: tabris_1.LayoutData.prev,
-        }).appendTo(modal);
-        modal.onBoundsChanged(({ value }) => {
-            if (tabris_1.device.screenHeight - 10 < value.height) {
-                modal.layoutData = {
-                    height: "auto",
-                    top: 10,
-                    bottom: 10,
-                    centerX: true,
-                    width
-                };
-                scrollableContent.layoutData = {
-                    top: tabris_1.LayoutData.prev,
-                    bottom: 25,
-                    left: 0,
-                    right: 0,
-                    height: "auto",
-                };
+            right: 0,
+            left: 0
+        });
+        const modal_content_scrollable = new tabris_1.ScrollView({
+            layoutData: 'stretchX'
+        });
+        modal_container.onBoundsChanged(({ value, target }) => {
+            const { height: contentViewHeight } = tabris_1.contentView.bounds;
+            if (contentViewHeight < value.height) {
+                modal_container.layoutData = Object.assign(Object.assign({}, properties_modal_container), { height: value.height > contentViewHeight ? (max_size - (max_size > contentViewHeight ? (20 + max_size - contentViewHeight) : 0)) : max_size > value.height ? value.height : max_size });
+                modal_content.layoutData = Object.assign({}, modal_content.layoutData);
+                modal_content_scrollable.layoutData = 'stretch';
             }
         });
         Object.defineProperty(this, "setButtonAccept", {
@@ -117,14 +142,14 @@ class Modal {
         });
         Object.defineProperty(this, "addView", {
             configurable: false,
-            value: (view) => (scrollableContent.append(view), undefined),
+            value: (view) => (modal_content_scrollable.append(view), undefined),
         });
         Object.defineProperty(this, "show", {
             configurable: false,
             value: (view) => {
                 if (!isAddButtons) {
                     isAddButtons = true;
-                    modal.append(new tabris_1.Composite({
+                    modal_container.append(new tabris_1.Composite({
                         layoutData: "stretchX",
                         id: "buttons-modal",
                         bottom: 0,
@@ -133,8 +158,9 @@ class Modal {
                 if (!isShow || isDetach) {
                     isShow = true;
                     isDetach = false;
+                    modal_container.append(modal_content);
                     tabris_1.contentView.append(modalWrap);
-                    (0, animation_1.animateShow)(modalWrap, 0, 400);
+                    (0, animation_1.animateShow)(modal_container, 0, 500);
                 }
             },
         });
@@ -159,8 +185,9 @@ class Modal {
                 if (isDetach)
                     return;
                 //para que se pueda usar en un contexto de mas alcanza a solo una llamada
-                (0, animation_1.animateHidden)(modalWrap, 0, AnimationTime.SHORT).then(() => {
+                (0, animation_1.animateHidden)(modalWrap, 0, 350).then(() => {
                     isDetach = true;
+                    isShow = false;
                     modalWrap.detach();
                 });
             },
