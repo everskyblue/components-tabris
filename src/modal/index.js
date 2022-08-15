@@ -69,58 +69,87 @@ export class Modal {
     constructor(attrs = {}) {
         const width = 300;
         const buttons = [];
-        //- no volver añadir los botones a la vista
+        //- iteracion
         let buttonAccept = null;
         let buttonCancel = null;
         let isAddButtons = false;
         let isDetach = false;
         let isShow = false;
 
+        // ui
+        const mobile_width = device.screenWidth;
+        const mobile_height = device.screenHeight;
+        const max_size = 560;
+        const properties_modal_container = {
+            elavation: 24,
+            centerY: true,
+            padding: 10,
+            cornerRadius: 5,
+            opacity: 0,
+            background: 'white',
+            id: 'modal-container'
+        }
+
+        if (max_size > mobile_width) {
+            Object.assign(properties_modal_container, {
+                left: 24,
+                right: 24,
+            })
+        } else {
+            Object.assign(properties_modal_container, {
+                width: max_size
+            })
+        }
+
         const modalWrap = new Composite({
             left: 0,
             right: 0,
             top: 0,
             bottom: 0,
-            opacity: 0,
+            opacity: 1,
             highlightOnTouch: false,
             background: new Color(0, 0, 0, 50),
         }).onTap((e) => e.preventDefault());
 
-        const modal = new Composite({
-            width,
-            background: "white",
-            centerY: true,
-            centerX: true,
-            padding: 10,
-            cornerRadius: 10,
-            ...attrs,
-        }).appendTo(modalWrap);
+        const modal_container = new Composite(properties_modal_container).appendTo(modalWrap);
 
-        const scrollableContent = new ScrollView({
-            id: "scrollable-modal-content",
-            direction: "vertical",
-            left: 0,
-            right: 0,
-            top: LayoutData.prev,
+        if ('title' in attrs) {
+            modal_container.append(new TextView({
+                id: 'modal-title',
+                font: 'medium 18px',
+                padding: 10,
+                left: 0,
+                right: 0,
+                text: attrs.text.toCapitalize()
+            }))
+        }
+
+        const modal_content = new Composite({
+            top: '#modal-title',
             bottom: LayoutData.prev,
-        }).appendTo(modal);
+            right: 0,
+            left: 0
+        });
 
-        modal.onBoundsChanged(({ value }) => {
-            if (device.screenHeight - 10 < value.height) {
-                modal.layoutData = {
-                    height: "auto",
-                    top: 10,
-                    bottom: 10,
-                    centerX: true,
-                    width
+        const modal_content_scrollable = new ScrollView({
+            layoutData: 'stretchX'
+        });
+
+        
+        modal_container.onBoundsChanged(({ value, target }) => {
+            const {height: contentViewHeight} = contentView.bounds;
+
+            if (contentViewHeight < value.height) {
+                modal_container.layoutData = {
+                    ...properties_modal_container,
+                    height: value.height > contentViewHeight ? (
+                        max_size - (max_size > contentViewHeight ? (20 + max_size - contentViewHeight) : 0)
+                    ) : max_size > value.height ? value.height : max_size
                 };
-                scrollableContent.layoutData = {
-                    top: LayoutData.prev,
-                    bottom: 25,
-                    left: 0,
-                    right: 0,
-                    height: "auto",
+                modal_content.layoutData = {
+                    ...modal_content.layoutData
                 };
+                modal_content_scrollable.layoutData = 'stretch';
             }
         });
 
@@ -146,7 +175,7 @@ export class Modal {
 
         Object.defineProperty(this, "addView", {
             configurable: false,
-            value: (view) => (scrollableContent.append(view), undefined),
+            value: (view) => (modal_content_scrollable.append(view), undefined),
         });
 
         Object.defineProperty(this, "show", {
@@ -154,7 +183,7 @@ export class Modal {
             value: (view) => {
                 if (!isAddButtons) {
                     isAddButtons = true;
-                    modal.append(
+                    modal_container.append(
                         new Composite({
                             layoutData: "stretchX",
                             id: "buttons-modal",
@@ -166,8 +195,9 @@ export class Modal {
                 if (!isShow || isDetach) {
                     isShow = true;
                     isDetach = false;
+                    modal_container.append(modal_content)
                     contentView.append(modalWrap);
-                    animateShow(modalWrap, 0, 400);
+                    animateShow(modal_container, 0, 500);
                 }
             },
         });
@@ -194,8 +224,9 @@ export class Modal {
             value: () => {
                 if (isDetach) return;
                 //para que se pueda usar en un contexto de mas alcanza a solo una llamada
-                animateHidden(modalWrap, 0, AnimationTime.SHORT).then(() => {
+                animateHidden(modalWrap, 0, 350).then(() => {
                     isDetach = true;
+                    isShow = false;
                     modalWrap.detach();
                 });
             },
